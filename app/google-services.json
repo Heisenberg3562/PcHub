@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "828311827337",
+    "firebase_url": "https://pchub-30173.firebaseio.com",
+    "project_id": "pchub-30173",
+    "storage_bucket": "pchub-30173.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828311827337:android:ca9ba58815481c1782e758",
+        "android_client_info": {
+          "package_name": "com.heisenberg.pchub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "828311827337-q1uhud7j989u516c1t0l6v99iggvu64g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmiVx0s8jnHcBus78quaqwW1N7oi6F5Pc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "828311827337-q1uhud7j989u516c1t0l6v99iggvu64g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
