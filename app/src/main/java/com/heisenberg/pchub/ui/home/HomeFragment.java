@@ -1,5 +1,6 @@
 package com.heisenberg.pchub.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,20 +17,40 @@ import com.heisenberg.pchub.R;
 
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private homeListner listner;
+    private TextView textView;
+
+    public interface homeListner{
+        void textBox1(String string);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        textView = root.findViewById(R.id.text_home);
+        listner.textBox1(textView.getText().toString());
         return root;
+    }
+
+    public void setTextbox1(String string){
+        textView.setText(string);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof homeListner){
+            listner = (homeListner) context;
+        }else {
+            throw new RuntimeException(context.toString()
+            + " must implement homeListner");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listner = null;
     }
 }
