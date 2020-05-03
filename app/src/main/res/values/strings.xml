@@ -16,5 +16,7 @@
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="member_code">Member Code</string>
+    <string name="code">Code</string>
 
 </resources>

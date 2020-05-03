@@ -11,36 +11,34 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 
 public class Login extends AppCompatActivity {
 
-    EditText Email,Pass;
+    EditText Pass;
     Button lbtn;
-    FirebaseAuth fAuth;
+    String str = null,pass="";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Email = findViewById(R.id.email);
+
         Pass = findViewById(R.id.password);
         lbtn = findViewById(R.id.lButton);
         lbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String email = Email.getText().toString().trim();
                 String password = Pass.getText().toString().trim();
-
-                if(TextUtils.isEmpty(email)){
-                    Email.setError("Email is Required.");
-                    return;
-                }
+                pass = password;
 
                 if(TextUtils.isEmpty(password)){
                     Pass.setError("Password is Required.");
@@ -51,26 +49,48 @@ public class Login extends AppCompatActivity {
                     Pass.setError("Password Must be >= 6 Characters");
                     return;
                 }
-
-//                progressBar.setVisibility(View.VISIBLE);
-
-                // authenticate the user
-
-                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                        }else {
-                            Toast.makeText(Login.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                            progressBar.setVisibility(View.GONE);
-                        }
-
-                    }
-                });
+                getWebsite();
+                if (str != null) {
+                    Intent intent = new Intent(Login.this ,MainActivity.class);
+                    intent.putExtra("Name",str);
+                    intent.putExtra("Code",pass);
+                    startActivity(intent);
+                }
 
             }
         });
+
+    }
+
+    private void getWebsite() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final StringBuilder builder = new StringBuilder();
+
+                try {
+                    Document doc = Jsoup.connect("https://heisenberg3562.github.io/MyFirstHtmlWebpage/myHtml.html").get();
+
+                    String id = pass;
+                    Elements links = doc.select("p[id="+id+"]");
+
+
+
+                    for (Element link : links) {
+                        builder.append(link.text());
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(Login.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    //builder.append("Error : ").append(e.getMessage()).append("\n");
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        str = builder.toString();
+                    }
+                });
+            }
+        }).start();
     }
 }
